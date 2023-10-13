@@ -4,7 +4,7 @@ import os
 class Pawn:
     def __init__(self, color, pos):
         self.color = color
-        self.pos = pos
+        self.position = pos
         # Construct the file path to the image dynamically
         image_folder = os.path.join('chess_assets', 'images', 'imgs-80px')
         image_filename = f'{color}_pawn.png'
@@ -33,26 +33,26 @@ class Pawn:
     def get_valid_moves(self, board):
         valid_moves = []
         row, col = self.position
-
+        
         if self.color == 'white':
+        # Move one square forward
             if row > 0 and board[row - 1][col] is None:
                 valid_moves.append((row - 1, col))
-                if row == 6 and board[4][col] is None:
-                    valid_moves.append((4, col))
+            # Capture diagonally
             if row > 0 and col > 0 and board[row - 1][col - 1] is not None and board[row - 1][col - 1].color == 'black':
                 valid_moves.append((row - 1, col - 1))
             if row > 0 and col < 7 and board[row - 1][col + 1] is not None and board[row - 1][col + 1].color == 'black':
                 valid_moves.append((row - 1, col + 1))
-        elif self.color == 'black':  # Black Pawn
+        elif self.color == 'black':
+            # Move one square forward
             if row < 7 and board[row + 1][col] is None:
                 valid_moves.append((row + 1, col))
-                if row == 1 and board[3][col] is None:
-                    valid_moves.append((3, col))
-            
-            # Diagonaly captures:
+            # Capture diagonally
             if row < 7 and col > 0 and board[row + 1][col - 1] is not None and board[row + 1][col - 1].color == 'white':
                 valid_moves.append((row + 1, col - 1))
             if row < 7 and col < 7 and board[row + 1][col + 1] is not None and board[row + 1][col + 1].color == 'white':
                 valid_moves.append((row + 1, col + 1))
 
+        print("Clicked at", position, "Piece:", piece)
+        print("Valid Moves:", self.valid_moves)
         return valid_moves
