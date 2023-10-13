@@ -6,35 +6,20 @@ class Chessboard:
     def __init__(self, screen):
         self.screen = screen
         self.SQUARE_SIZE = screen.get_width() // 8
-        self.board = self.setup_board()
+        self.board = [[None for _ in range(8)] for _ in range(8)]
         self.selected_piece = None
         self.valid_moves = []
-
-    def setup_board(self):
-        # Initialize the chessboard with pieces
-        board = [[None] * 8 for _ in range(8)]
-
-        # Set up pawns for both sides
-        for col in range(8):
-            board[1][col] = Pawn('black', (1, col))
-            board[6][col] = Pawn('white', (6, col))
-
-        # You would continue to set up other pieces (rooks, knights, etc.) here.
-
-        return board
 
     def draw(self):
         for row in range(8):
             for col in range(8):
-                #color = (200, 200, 200) if (row + col) % 2 == 0 else (100, 100, 100)
-                #pygame.draw.rect(self.screen, color, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
+                color = (200, 200, 200) if (row + col) % 2 == 0 else (100, 100, 100)
+                pygame.draw.rect(self.screen, color, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
                 
                 piece = self.board[row][col]
                 if piece:
-                    #image = piece.get_image()  # Get the piece's image
-                    #self.screen.blit(image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
-                    piece.draw(self.screen, self.SQUARE_SIZE, row, col)
-
+                    piece_image = piece.image
+                    self.screen.blit(piece_image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
 
     def handle_click(self, position):
         row, col = position

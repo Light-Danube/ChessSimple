@@ -4,8 +4,8 @@ class Pawn:
     def __init__(self, color, pos):
         self.color = color
         self.pos = pos
-        #self.image = pygame.image.load(f'chess_assets/images/imgs-80px/{color}_pawn.png')
-        self.radius = 20
+        self.image = pygame.image.load(f'chess_assets/images/imgs-80px/{color}_pawn.png')
+        #self.radius = 20
         self.has_moved = False
         
     def draw(self, screen, square_size, row, col):

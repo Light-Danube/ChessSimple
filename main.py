@@ -1,5 +1,7 @@
 import pygame
 from chess_data.board import Chessboard
+from chess_data.pieces.pawn import Pawn
+
 
 # Initialize Pygame
 pygame.init()
@@ -12,6 +14,18 @@ pygame.display.set_caption('Chess Game')
 
 # Create a Chessboard instance
 chessboard = Chessboard(screen)
+
+# Create black Pawns and add them to the board
+for col in range(8):
+    black_pawn = Pawn('black', (1, col))
+    chessboard.board[1][col] = black_pawn
+
+# Create white Pawns and add them to the board
+for col in range(8):
+    white_pawn = Pawn('white', (6, col))
+    chessboard.board[6][col] = white_pawn
+
+print(chessboard.board[6][1])
 
 # Main game loop
 running = True
