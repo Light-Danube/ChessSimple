@@ -1,4 +1,10 @@
 import pygame
+from chess_data.pieces.pawn import Pawn
+from chess_data.pieces.rook import Rook
+from chess_data.pieces.queen import Queen
+from chess_data.pieces.bishop import Bishop
+from chess_data.pieces.knight import Knight
+from chess_data.pieces.king import King
 
 class Chessboard:
     def __init__(self, screen):
@@ -7,7 +13,49 @@ class Chessboard:
         self.board = [[None for _ in range(8)] for _ in range(8)]
         self.selected_piece = None
         self.valid_moves = []
+        self.turn = 'white'  # Add a turn attribute
 
+        # Define the initial configuration
+        initial_config = [
+            ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+            ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+            ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
+        ]
+        
+        self.setup_board(initial_config)
+    
+    def create_piece(self, piece_code, position):
+        color = 'white' if piece_code[0] == 'w' else 'black'
+        piece_type = piece_code[1]
+
+        # Implement the creation of piece objects based on piece_code
+        if piece_type == 'P':
+            return Pawn(color, position)
+        if piece_type == "R":
+            return Rook(color, position)
+        if piece_type == "Q":
+            return Queen(color, position)
+        if piece_type == "K":
+            return King(color, position)
+        if piece_type == "B":
+            return Bishop(color, position)
+        if piece_type == "N":
+            return Knight(color, position)
+    
+    def setup_board(self, config):
+        for row in range(8):
+            for col in range(8):
+                piece_code = config[row][col]
+                if piece_code:
+                    piece = self.create_piece(piece_code, (row, col))
+                    self.board[row][col] = piece
+
+    
     def draw(self):
         for row in range(8):
             for col in range(8):
@@ -29,11 +77,11 @@ class Chessboard:
                     blit_position = (col * self.SQUARE_SIZE + x_offset, row * self.SQUARE_SIZE + y_offset)
                     
                     if piece == self.selected_piece:
-                     pygame.draw.rect(self.screen, (0, 255, 0), (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 4)
+                        pygame.draw.rect(self.screen, (0, 255, 0), (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 4)
                     
                     if (row, col) in self.valid_moves:
-                     pygame.draw.rect(self.screen, (0, 0, 255), (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 4)
-                     print(f"Valid moves for {self.color} {self.__class__.__name__} at {self.position}: {self.valid_moves}")
+                        pygame.draw.rect(self.screen, (0, 0, 255), (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 4)
+                        print(f"Valid moves for {self.color} {self.__class__.__name__} at {self.position}: {self.valid_moves}")
 
 
 
@@ -71,6 +119,8 @@ class Chessboard:
             self.board[current_row][current_col] = None  # Remove the piece from the old position
             self.board[new_row][new_col] = piece  # Place the piece in the new position
             piece.position = new_position  # Update the piece's position
+            
+            self.turn = 'white' if self.turn == 'black' else 'black'
 
         # Deselect the piece after the move
         self.selected_piece = None

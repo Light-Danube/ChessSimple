@@ -53,6 +53,4 @@ class Pawn:
             if row < 7 and col < 7 and board[row + 1][col + 1] is not None and board[row + 1][col + 1].color == 'white':
                 valid_moves.append((row + 1, col + 1))
 
-        print("Clicked at", position, "Piece:", piece)
-        print("Valid Moves:", self.valid_moves)
         return valid_moves
