@@ -1,5 +1,5 @@
 import pygame
-#from .pieces.pawn import Pawn  # Import the Pawn class from the pieces package
+from .pieces.pawn import Pawn  # Import the Pawn class from the pieces package
 #from .pieces.rook import Rook
 #from .pieces.queen import Queen
 #from .pieces.king import King
@@ -23,10 +23,15 @@ class Chessboard:
         ### Initialize the chessboard with pieces
         board = [[None] * 8 for _ in range(8)]
 
-        # Set up pawns for both sides
-        #for col in range(8):
-            #board[1][col] = Pawn('black', (1, col))
-            #board[6][col] = Pawn('white', (6, col))
+        # Create black Pawns
+        for col in range(8):
+            black_pawn = Pawn('black', (1, col))
+            board[1][col] = black_pawn
+        
+        # Create white Pawns
+        for col in range(8):
+            white_pawn = Pawn('white', (6, col))
+            board[6][col] = white_pawn
 
         # You would continue to set up other pieces (rooks, knights, etc.) here.
 
@@ -40,7 +45,10 @@ class Chessboard:
                 
                 piece = self.board[row][col]
                 if piece:
-                    piece.draw(self.screen)
+                    piece_image = piece.image  # Get the pawn image
+                    image_rect = piece_image.get_rect()
+                    image_rect.topleft = (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE)
+                    self.screen.blit(piece_image, image_rect)
 
     def handle_click(self, position):
         row, col = position
