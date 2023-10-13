@@ -10,7 +10,6 @@ pygame.init()
 WINDOWWIDTH = 400
 WINDOWHEIGHT = 400
 screen = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-print("old xcaption", pygame.display.get_caption())
 pygame.display.set_caption('SimpleChess')
 
 # Create a Chessboard instance
@@ -26,6 +25,9 @@ for col in range(8):
     white_pawn = Pawn('white', [6, col])
     chessboard.board[6][col] = white_pawn
 
+#
+valid_moves = []
+selected_piece = []
 
 # Main game loop
 running = True
@@ -34,8 +36,22 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Handle user clicks here
-            pass
+            # Get the clicked square
+            col = event.pos[0] // chessboard.SQUARE_SIZE
+            row = event.pos[1] // chessboard.SQUARE_SIZE
+            clicked_square = (row, col)
+
+            if selected_piece is None:
+                piece = chessboard.board[row][col]
+                if piece and piece.color == 'white':
+                    selected_piece = piece
+                    valid_moves = chessboard.get_valid_moves('white')
+            else:
+                if clicked_square in valid_moves:
+                    # Move the selected piece to the clicked square
+                    chessboard.move_piece(selected_piece, clicked_square)
+                    selected_piece = None
+                    valid_moves = []
 
     # Draw the chessboard and pieces
     screen.fill((0, 0, 0))
