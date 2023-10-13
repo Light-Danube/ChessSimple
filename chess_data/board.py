@@ -15,6 +15,11 @@ class Chessboard:
         self.valid_moves = []
 
     def setup_board(self):
+        """Creates board and initializes with figures.
+
+        Returns:
+            board: board with pieces to manipualte.
+        """
         ### Initialize the chessboard with pieces
         board = [[None] * 8 for _ in range(8)]
 
