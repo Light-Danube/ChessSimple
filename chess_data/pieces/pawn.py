@@ -17,6 +17,19 @@ class Pawn:
     def get_image(self):
         return self.image
     
+    def capture(self, target_position, board):
+        row, col = self.position
+        target_row, target_col = target_position
+
+        # Check if the target position is a valid capture
+        if abs(target_row - row) == 1 and abs(target_col - col) == 1:
+            target_piece = board[target_row][target_col]
+
+            if target_piece is not None and target_piece.color != self.color:
+                board[target_row][target_col] = None
+                self.move(target_position, board)
+                return True
+    
     def get_valid_moves(self, board):
         valid_moves = []
         row, col = self.position

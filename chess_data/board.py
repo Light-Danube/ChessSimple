@@ -11,11 +11,13 @@ class Chessboard:
     def draw(self):
         for row in range(8):
             for col in range(8):
-                #color = (200, 200, 200) if (row + col) % 2 == 0 else (100, 100, 100)
-                #pygame.draw.rect(self.screen, color, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
+                color = (200, 200, 200) if (row + col) % 2 == 0 else (100, 100, 100)
+                pygame.draw.rect(self.screen, color, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
                 
                 piece = self.board[row][col]
                 if piece:
+                    piece_image = piece.image
+
                     # Resize the image to fit within the 50x50 pixel square
                     piece_image = pygame.transform.scale(piece_image, (self.SQUARE_SIZE, self.SQUARE_SIZE))
 
