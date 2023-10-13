@@ -1,32 +1,36 @@
 import pygame
 from chess_data.board import Chessboard
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((400, 400))
-    pygame.display.set_caption('Chess Game')
+# Initialize Pygame
+pygame.init()
 
-    # Initialize the Chessboard
-    chessboard = Chessboard(screen)
+# Set up your screen
+WINDOWWIDTH = 400
+WINDOWHEIGHT = 400
+screen = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
+pygame.display.set_caption('Chess Game')
 
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+# Create a Chessboard instance
+chessboard = Chessboard(screen)
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                row = pos[1] // chessboard.SQUARE_SIZE
-                col = pos[0] // chessboard.SQUARE_SIZE
-                chessboard.handle_click((row, col))
+# Main game loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Handle user clicks here
+            pass
 
-        # Draw the chessboard
-        chessboard.draw()
+    # Clear the screen
+    screen.fill((255, 255, 255))
 
-        pygame.display.flip()
+    # Draw the chessboard and pieces
+    chessboard.draw()
 
-    pygame.quit()
+    # Update the display
+    pygame.display.flip()
 
-if __name__ == "__main__":
-    main()
+# Quit Pygame
+pygame.quit()

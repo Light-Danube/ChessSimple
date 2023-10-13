@@ -15,23 +15,13 @@ class Chessboard:
         self.valid_moves = []
 
     def setup_board(self):
-        """Creates board and initializes with figures.
-
-        Returns:
-            board: board with pieces to manipualte.
-        """
-        ### Initialize the chessboard with pieces
+        # Initialize the chessboard with pieces
         board = [[None] * 8 for _ in range(8)]
 
-        # Create black Pawns
+        # Set up pawns for both sides
         for col in range(8):
-            black_pawn = Pawn('black', (1, col))
-            board[1][col] = black_pawn
-        
-        # Create white Pawn
-        for col in range(8):
-            white_pawn = Pawn('white', (6, col))
-            board[6][col] = white_pawn
+            board[1][col] = Pawn('black', (1, col))
+            board[6][col] = Pawn('white', (6, col))
 
         # You would continue to set up other pieces (rooks, knights, etc.) here.
 
@@ -45,9 +35,8 @@ class Chessboard:
                 
                 piece = self.board[row][col]
                 if piece:
-                    # Get the piece's image and scale it to fit the square size
-                    piece_image = pygame.transform.scale(piece.image, (self.SQUARE_SIZE, self.SQUARE_SIZE))
-                    self.screen.blit(piece_image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
+                    image = piece.get_image()  # Get the piece's image
+                    self.screen.blit(image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
 
 
     def handle_click(self, position):

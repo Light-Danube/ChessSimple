@@ -7,6 +7,9 @@ class Pawn:
         self.image = pygame.image.load(f'chess_assets/images/imgs-80px/{color}_pawn.png')
         self.has_moved = False
     
+    def get_image(self):
+        return self.image
+    
     def get_valid_moves(self, board):
         valid_moves = []
         row, col = self.position
