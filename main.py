@@ -10,10 +10,11 @@ pygame.init()
 WINDOWWIDTH = 400
 WINDOWHEIGHT = 400
 screen = pygame.display.set_mode(WINDOWWIDTH, WINDOWHEIGHT)
-pygame.display.set_caption('CG')
+print("old xcaption", pygame.display.get_caption())
+pygame.display.set_caption('111111')
 
 # Create a Chessboard instance
-#chessboard = Chessboard(screen)
+chessboard = Chessboard(screen)
 
 # Create black Pawns and add them to the board
 for col in range(8):
