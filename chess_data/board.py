@@ -1,11 +1,9 @@
 import pygame
-from .pieces.pawn import Pawn  # Import the Pawn class from the pieces package
-
 
 class Chessboard:
     def __init__(self, screen):
         self.screen = screen
-        self.SQUARE_SIZE = screen.get_width() // 8
+        self.SQUARE_SIZE = 50
         self.board = [[None for _ in range(8)] for _ in range(8)]
         self.selected_piece = None
         self.valid_moves = []
@@ -15,11 +13,19 @@ class Chessboard:
             for col in range(8):
                 color = (200, 200, 200) if (row + col) % 2 == 0 else (100, 100, 100)
                 pygame.draw.rect(self.screen, color, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
-                
                 piece = self.board[row][col]
                 if piece:
-                    piece_image = piece.image
-                    self.screen.blit(piece_image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
+                    # Resize the image to fit within the 50x50 pixel square
+                    piece_image = pygame.transform.scale(piece_image, (self.SQUARE_SIZE, self.SQUARE_SIZE))
+
+                    # Determine the offset to center the image within the square
+                    x_offset = (self.SQUARE_SIZE - piece_image.get_width()) // 2
+                    y_offset = (self.SQUARE_SIZE - piece_image.get_height()) // 2
+
+                    # Calculate the position to blit the image on the screen
+                    blit_position = (col * self.SQUARE_SIZE + x_offset, row * self.SQUARE_SIZE + y_offset)
+
+                    self.screen.blit(piece_image, blit_position)
 
     def handle_click(self, position):
         row, col = position

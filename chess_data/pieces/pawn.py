@@ -1,18 +1,18 @@
 import pygame
+import os
 
 class Pawn:
     def __init__(self, color, pos):
         self.color = color
         self.pos = pos
-        self.image = pygame.image.load(f'chess_assets/images/imgs-80px/{color}_pawn.png')
-        #self.radius = 20
+        # Construct the file path to the image dynamically
+        image_folder = os.path.join('chess_assets', 'images', 'imgs-80px')
+        image_filename = f'{color}_pawn.png'
+        image_path = os.path.join(image_folder, image_filename)
+
+        # Load the image
+        self.image = pygame.image.load(image_path)
         self.has_moved = False
-        
-    def draw(self, screen, square_size, row, col):
-        x = col * square_size + square_size // 2
-        y = row * square_size + square_size // 2
-        color = (0, 0, 0) if self.color == 'black' else (255, 255, 255)
-        pygame.draw.circle(screen, color, (x, y), self.radius)
     
     def get_image(self):
         return self.image
