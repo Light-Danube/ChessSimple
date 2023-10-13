@@ -1,5 +1,6 @@
 import pygame
 from chess_data.board import Chessboard
+from chess_data.pieces.pawn import Pawn
 
 # Initialize Pygame
 pygame.init()
@@ -36,3 +37,4 @@ while running:
 
 # Quit Pygame
 pygame.quit()
+
