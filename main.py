@@ -7,7 +7,7 @@ pygame.init()
 # Set up your screen
 WINDOWWIDTH = 400
 WINDOWHEIGHT = 400
-screen = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
+screen = pygame.display.set_mode(WINDOWWIDTH, WINDOWHEIGHT)
 pygame.display.set_caption('Chess Game')
 
 # Create a Chessboard instance
@@ -30,7 +30,6 @@ while running:
     chessboard.draw()
 
     # Update the display
-    pygame.display.flip()
 
 # Quit Pygame
 pygame.quit()

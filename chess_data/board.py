@@ -1,10 +1,6 @@
 import pygame
-from pieces.pawn import Pawn  # Import the Pawn class from the pieces package
-#from .pieces.rook import Rook
-#from .pieces.queen import Queen
-#from .pieces.king import King
-#from .pieces.knight import Knight
-#from .pieces.bishop import Bishop
+from .pieces.pawn import Pawn  # Import the Pawn class from the pieces package
+
 
 class Chessboard:
     def __init__(self, screen):
@@ -30,13 +26,14 @@ class Chessboard:
     def draw(self):
         for row in range(8):
             for col in range(8):
-                color = (200, 200, 200) if (row + col) % 2 == 0 else (100, 100, 100)
-                pygame.draw.rect(self.screen, color, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
+                #color = (200, 200, 200) if (row + col) % 2 == 0 else (100, 100, 100)
+                #pygame.draw.rect(self.screen, color, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
                 
                 piece = self.board[row][col]
                 if piece:
-                    image = piece.get_image()  # Get the piece's image
-                    self.screen.blit(image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
+                    #image = piece.get_image()  # Get the piece's image
+                    #self.screen.blit(image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
+                    piece.draw(self.screen, self.SQUARE_SIZE, row, col)
 
 
     def handle_click(self, position):
