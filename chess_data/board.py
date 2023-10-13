@@ -1,5 +1,5 @@
 import pygame
-from .pieces.pawn import Pawn  # Import the Pawn class from the pieces package
+from pieces.pawn import Pawn  # Import the Pawn class from the pieces package
 #from .pieces.rook import Rook
 #from .pieces.queen import Queen
 #from .pieces.king import King
@@ -28,7 +28,7 @@ class Chessboard:
             black_pawn = Pawn('black', (1, col))
             board[1][col] = black_pawn
         
-        # Create white Pawns
+        # Create white Pawn
         for col in range(8):
             white_pawn = Pawn('white', (6, col))
             board[6][col] = white_pawn
@@ -45,10 +45,10 @@ class Chessboard:
                 
                 piece = self.board[row][col]
                 if piece:
-                    piece_image = piece.image  # Get the pawn image
-                    image_rect = piece_image.get_rect()
-                    image_rect.topleft = (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE)
-                    self.screen.blit(piece_image, image_rect)
+                    # Get the piece's image and scale it to fit the square size
+                    piece_image = pygame.transform.scale(piece.image, (self.SQUARE_SIZE, self.SQUARE_SIZE))
+                    self.screen.blit(piece_image, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE))
+
 
     def handle_click(self, position):
         row, col = position

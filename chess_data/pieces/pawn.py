@@ -4,7 +4,7 @@ class Pawn:
     def __init__(self, color, pos):
         self.color = color
         self.pos = pos
-        self.img_path = pygame.image.load(f'chess_assets/images/imgs-80px/{color}_pawn.png')
+        self.image = pygame.image.load(f'chess_assets/images/imgs-80px/{color}_pawn.png')
         self.has_moved = False
     
     def get_valid_moves(self, board):
