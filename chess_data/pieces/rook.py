@@ -4,7 +4,7 @@ import os
 class Rook:
     def __init__(self, color, pos):
         self.color = color
-        self.position = pos
+        self.pos = pos
         # Construct the file path to the image dynamically
         image_folder = os.path.join('chess_assets', 'images', 'imgs-80px')
         image_filename = f'{color}_rook.png'
@@ -14,13 +14,28 @@ class Rook:
         self.image = pygame.image.load(image_path)
         self.has_moved = False
     
-    def get_image(self):
-        return self.image
+    def move(self, new_position, board):
+        row, col = self.pos
+        new_row, new_col = new_position
+
+        # Check if the target position is a valid move
+        if new_position in self.get_valid_moves(board):
+            target_piece = board[new_row][new_col]
+
+            # Capture the target piece if it's an enemy piece
+            if target_piece is not None and target_piece.color != self.color:
+                board[new_row][new_col] = None
+
+            # Move the pawn to the new position
+            board[row][col] = None
+            board[new_row][new_col] = self
+            self.pos = new_position
+            self.has_moved = True
     
     
     def get_valid_moves(self, board):
         valid_moves = []
-        row, col = self.position
+        row, col = self.pos
 
         # Check vertically
         for r in range(row + 1, 8):

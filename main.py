@@ -16,6 +16,7 @@ chessboard = Chessboard(screen)
 
 # Main game loop
 running = True
+selected_piece = None
 
 while running:
     for event in pygame.event.get():
@@ -23,7 +24,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Left mouse button click
-                # Get the clicked square          
+                # Get the clicked square
                 mx, my = pygame.mouse.get_pos()
                 col = mx // chessboard.SQUARE_SIZE
                 row = my // chessboard.SQUARE_SIZE
@@ -33,7 +34,7 @@ while running:
     # Draw the chessboard and pieces
     screen.fill((0, 0, 0))
     chessboard.draw()
-    pygame.display.flip()
+    pygame.display.flip()  # Update the display
 
 # Quit Pygame
 pygame.quit()
