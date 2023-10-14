@@ -20,6 +20,26 @@ class King:
 
         # Check if the target position is a valid move
         if new_position in self.get_valid_moves(board):
+            # Check for castling move
+            if new_row == row and abs(new_col - col) == 2:
+                if new_col > col:  # Kingside castling
+                    rook = board[row][7]
+                    new_rook_position = (new_row, new_col - 1)
+                else:  # Queenside castling
+                    rook = board[row][0]
+                    new_rook_position = (new_row, new_col + 1)
+
+                # Move the rook to the new position
+                board[row][col] = None
+                board[new_row][new_col] = self
+                self.pos = new_position
+                self.has_moved = True
+
+                board[rook.pos[0]][rook.pos[1]] = None
+                board[new_rook_position[0]][new_rook_position[1]] = rook
+                rook.pos = new_rook_position
+                rook.has_moved = True
+        else:
             target_piece = board[new_row][new_col]
 
             # Capture the target piece if it's an enemy piece
@@ -31,6 +51,7 @@ class King:
             board[new_row][new_col] = self
             self.pos = new_position
             self.has_moved = True
+            
     
     def get_valid_moves(self, board):
         valid_moves = []

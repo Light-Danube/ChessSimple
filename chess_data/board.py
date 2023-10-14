@@ -175,8 +175,8 @@ class Chessboard:
             new_king_position = (row, 6)
 
         # Move the king and rook
-        self.move_piece(self.selected_piece, new_king_position)
-        self.move_piece(kingside_rook, kingside_rook_position)
+        self.selected_piece.move(new_king_position, self.selected_piece)
+        self.selected_piece.move(kingside_rook_position, kingside_rook)
     
     def castle_queenside(self, player_color):
         # Perform queenside castling for the current player
@@ -191,9 +191,9 @@ class Chessboard:
             queenside_rook_position = (row, 0)
             new_king_position = (row, 2)
 
-        # Move the king and rook
-        self.move_piece(self.selected_piece, new_king_position)
-        self.move_piece(queenside_rook, queenside_rook_position)    
+        # Move the king and rook       
+        self.selected_piece.move(new_king_position, self.selected_piece)
+        self.selected_piece.move(queenside_rook_position, queenside_rook)   
     
     
     ### CHECK

@@ -1,6 +1,8 @@
 import pygame
 import os
 
+from chess_data.pieces.king import King
+
 class Rook:
     def __init__(self, color, pos):
         self.color = color
@@ -19,14 +21,15 @@ class Rook:
         new_row, new_col = new_position
 
         # Check if the target position is a valid move
-        if new_position in self.get_valid_moves(board):
+        valid_moves = self.get_valid_moves(board)
+        if new_position in valid_moves:
             target_piece = board[new_row][new_col]
 
             # Capture the target piece if it's an enemy piece
             if target_piece is not None and target_piece.color != self.color:
                 board[new_row][new_col] = None
 
-            # Move the pawn to the new position
+            # Move the rook to the new position
             board[row][col] = None
             board[new_row][new_col] = self
             self.pos = new_position
@@ -35,40 +38,21 @@ class Rook:
     
     def get_valid_moves(self, board):
         valid_moves = []
-        row, col = self.pos
 
-        # Check vertically
-        for r in range(row + 1, 8):
-            if board[r][col] is None:
-                valid_moves.append((r, col))
-            else:
-                if board[r][col].color != self.color:
-                    valid_moves.append((r, col))
-                break
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            new_row, new_col = self.pos[0] + dr, self.pos[1] + dc
 
-        for r in range(row - 1, -1, -1):
-            if board[r][col] is None:
-                valid_moves.append((r, col))
-            else:
-                if board[r][col].color != self.color:
-                    valid_moves.append((r, col))
-                break
+            while 0 <= new_row < 8 and 0 <= new_col < 8:
+                target_piece = board[new_row][new_col]
 
-        # Check horizontally
-        for c in range(col + 1, 8):
-            if board[row][c] is None:
-                valid_moves.append((row, c))
-            else:
-                if board[row][c].color != self.color:
-                    valid_moves.append((row, c))
-                break
+                if target_piece is None:
+                    valid_moves.append((new_row, new_col))
+                elif target_piece.color != self.color:
+                    valid_moves.append((new_row, new_col))
+                    break
+                else:
+                    break
 
-        for c in range(col - 1, -1, -1):
-            if board[row][c] is None:
-                valid_moves.append((row, c))
-            else:
-                if board[row][c].color != self.color:
-                    valid_moves.append((row, c))
-                break
+                new_row, new_col = new_row + dr, new_col + dc
 
         return valid_moves
