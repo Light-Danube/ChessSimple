@@ -98,28 +98,17 @@ class Chessboard:
         elif self.selected_piece:
             print("Moving....")
             if (self.selected_piece.pos[0], self.selected_piece.pos[1], row, col) in self.valid_moves:
-                # Call the move function to move the selected piece
-                #print("Moving....")
-                self.selected_piece.move((row, col), self.board)
+                if isinstance(self.selected_piece, King) and col == 6 and self.can_castle_kingside(player_color):
+                    # Perform kingside castling
+                    self.castle_kingside(player_color)
+                elif isinstance(self.selected_piece, King) and col == 2 and self.can_castle_queenside(player_color):
+                    # Perform queenside castling
+                    self.castle_queenside(player_color)
+                else:
+                    # Call the move method to move the selected piece
+                    self.selected_piece.move(position, self.board)
                 self.selected_piece = None
                 self.valid_moves = []
-
-    """def move_piece(self, piece, new_position):
-        current_row, current_col = piece.pos
-        new_row, new_col = new_position
-
-        # Check if the clicked position is a valid move for the selected piece
-        if new_position in self.valid_moves and piece is not None:
-            self.board[current_row][current_col] = None  # Remove the piece from the old position
-            piece.pos = new_position  # Update the piece's position
-            self.board[new_row][new_col] = piece
-            
-            self.draw()
-
-        # Deselect the piece after the move
-        self.selected_piece = None
-        self.valid_moves = []"""
-
 
     def get_valid_moves(self, player_color):
         valid_moves = []
@@ -130,3 +119,87 @@ class Chessboard:
                     piece_valid_moves = piece.get_valid_moves(self.board)
                     valid_moves.extend([(row, col, r, c) for r, c in piece_valid_moves])
         return valid_moves
+    
+    ###CASTLING
+    
+    def can_castle_kingside(self, player_color):
+        # Check if the kingside castling is possible for the current player
+        if player_color == 'white':
+            row = 7
+            kingside_rook = self.board[row][7]
+        else:
+            row = 0
+            kingside_rook = self.board[row][7]
+
+        # Check if the kingside rook and king have not moved
+        if (
+            isinstance(kingside_rook, Rook) and not kingside_rook.has_moved
+            and isinstance(self.selected_piece, King) and not self.selected_piece.has_moved
+        ):
+            # Check if the squares between the king and kingside rook are empty
+            if all(self.board[row][col] is None for col in range(5, 7)):
+                return True
+        return False
+    
+    def can_castle_queenside(self, player_color):
+        # Check if the queenside castling is possible for the current player
+        if player_color == 'white':
+            row = 7
+            queenside_rook = self.board[row][0]
+        else:
+            row = 0
+            queenside_rook = self.board[row][0]
+
+        # Check if the queenside rook and king have not moved
+        if (
+            isinstance(queenside_rook, Rook) and not queenside_rook.has_moved
+            and isinstance(self.selected_piece, King) and not self.selected_piece.has_moved
+        ):
+            # Check if the squares between the king and queenside rook are empty
+            if all(self.board[row][col] is None for col in range(1, 4)):
+                return True
+        return False
+    
+    
+    def castle_kingside(self, player_color):
+        # Perform kingside castling for the current player
+        if player_color == 'white':
+            row = 7
+            kingside_rook = self.board[row][7]
+            kingside_rook_position = (row, 7)
+            new_king_position = (row, 6)
+        else:
+            row = 0
+            kingside_rook = self.board[row][7]
+            kingside_rook_position = (row, 7)
+            new_king_position = (row, 6)
+
+        # Move the king and rook
+        self.move_piece(self.selected_piece, new_king_position)
+        self.move_piece(kingside_rook, kingside_rook_position)
+    
+    def castle_queenside(self, player_color):
+        # Perform queenside castling for the current player
+        if player_color == 'white':
+            row = 7
+            queenside_rook = self.board[row][0]
+            queenside_rook_position = (row, 0)
+            new_king_position = (row, 2)
+        else:
+            row = 0
+            queenside_rook = self.board[row][0]
+            queenside_rook_position = (row, 0)
+            new_king_position = (row, 2)
+
+        # Move the king and rook
+        self.move_piece(self.selected_piece, new_king_position)
+        self.move_piece(queenside_rook, queenside_rook_position)    
+    
+    
+    ### CHECK
+    
+    ### CHECKMATE
+    
+    ### DRAW
+    
+    ### OTHER MOMENTS
