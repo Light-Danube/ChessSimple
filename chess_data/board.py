@@ -109,6 +109,13 @@ class Chessboard:
                     self.selected_piece.move(position, self.board)
                 self.selected_piece = None
                 self.valid_moves = []
+        
+        if self.is_check(player_color):
+            print(f"{player_color.capitalize()} is in check!")
+
+        # Check if the game is in checkmate
+        if self.is_checkmate(player_color):
+            print(f"{player_color.capitalize()} is in checkmate!")
 
     def get_valid_moves(self, player_color):
         valid_moves = []
@@ -135,6 +142,7 @@ class Chessboard:
         if (
             isinstance(kingside_rook, Rook) and not kingside_rook.has_moved
             and isinstance(self.selected_piece, King) and not self.selected_piece.has_moved
+            and not self.selected_piece.castled
         ):
             # Check if the squares between the king and kingside rook are empty
             if all(self.board[row][col] is None for col in range(5, 7)):
@@ -154,6 +162,7 @@ class Chessboard:
         if (
             isinstance(queenside_rook, Rook) and not queenside_rook.has_moved
             and isinstance(self.selected_piece, King) and not self.selected_piece.has_moved
+            and not self.selected_piece.castled
         ):
             # Check if the squares between the king and queenside rook are empty
             if all(self.board[row][col] is None for col in range(1, 4)):
@@ -175,8 +184,8 @@ class Chessboard:
             new_king_position = (row, 6)
 
         # Move the king and rook
-        self.selected_piece.move(new_king_position, self.selected_piece)
-        self.selected_piece.move(kingside_rook_position, kingside_rook)
+        self.selected_piece.move_castle(new_king_position, self.board, Rook)
+        kingside_rook.move(kingside_rook_position, self.board)
     
     def castle_queenside(self, player_color):
         # Perform queenside castling for the current player
@@ -192,13 +201,50 @@ class Chessboard:
             new_king_position = (row, 2)
 
         # Move the king and rook       
-        self.selected_piece.move(new_king_position, self.selected_piece)
-        self.selected_piece.move(queenside_rook_position, queenside_rook)   
+        self.selected_piece.move_castle(new_king_position, self.board, Rook)
+        queenside_rook.move(queenside_rook_position, self.board)   
     
     
     ### CHECK
+    def is_checkmate(self, player_color):
+        # Check if the king is in check
+        if not self.is_check(player_color):
+            return False
+
+        # Check if the king has any legal moves left
+        for row in range(8):
+            for col in range(8):
+                piece = self.board[row][col]
+                if piece is not None and piece.color == player_color:
+                    valid_moves = piece.get_valid_moves(self.board)
+                    for move in valid_moves:
+                        # Simulate the move and check if the king is still in check
+                        new_board = [row[:] for row in self.board]
+                        new_board[row][col] = None
+                        new_board[move[0]][move[1]] = piece
+                        if not self.is_check(new_board, player_color):
+                            return False
+        # If the king is in check and has no legal moves, it's checkmate
+        return True
     
-    ### CHECKMATE
+    def is_check(self, player_color):
+    # Find the king's position
+        for row in range(8):
+            for col in range(8):
+                piece = self.board[row][col]
+                if isinstance(piece, King) and piece.color == player_color:
+                    king_position = (row, col)
+                    break
+
+        # Check if the king is threatened by any opponent's piece
+        for row in range(8):
+            for col in range(8):
+                piece = self.board[row][col]
+                if piece is not None and piece.color != player_color:
+                    valid_moves = piece.get_valid_moves(self.board)
+                    if king_position in valid_moves:
+                        return True
+        return False
     
     ### DRAW
     

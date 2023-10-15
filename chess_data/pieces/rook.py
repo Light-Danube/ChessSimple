@@ -1,8 +1,6 @@
 import pygame
 import os
 
-from chess_data.pieces.king import King
-
 class Rook:
     def __init__(self, color, pos):
         self.color = color

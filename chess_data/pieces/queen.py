@@ -59,6 +59,28 @@ class Queen:
             r -= 1
             c += 1
 
-        # Continue with the logic for other diagonal directions.
+        # Diagonal (down-right)
+        r, c = row + 1, col + 1
+        while r < 8 and c < 8:
+            if board[r][c] is None:
+                valid_moves.append((r, c))
+            else:
+                if board[r][c].color != self.color:
+                    valid_moves.append((r, c))
+                break
+            r += 1
+            c += 1
+
+        # Diagonal (down-left)
+        r, c = row + 1, col - 1
+        while r < 8 and c >= 0:
+            if board[r][c] is None:
+                valid_moves.append((r, c))
+            else:
+                if board[r][c].color != self.color:
+                    valid_moves.append((r, c))
+                break
+            r += 1
+            c -= 1
 
         return valid_moves

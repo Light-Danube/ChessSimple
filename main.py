@@ -1,6 +1,5 @@
 import pygame
 from chess_data.board import Chessboard
-from chess_data.pieces.pawn import Pawn
 
 # Initialize Pygame
 pygame.init()
@@ -26,10 +25,10 @@ while running:
             if event.button == 1:  # Left mouse button click
                 # Get the clicked square
                 mx, my = pygame.mouse.get_pos()
-                col = mx // chessboard.SQUARE_SIZE
-                row = my // chessboard.SQUARE_SIZE
+                cc = mx // chessboard.SQUARE_SIZE
+                rr = my // chessboard.SQUARE_SIZE
                 
-                chessboard.handle_click((row, col), 'white')
+                chessboard.handle_click((rr, cc), 'white')
 
     # Draw the chessboard and pieces
     screen.fill((0, 0, 0))
