@@ -34,6 +34,18 @@ while running:
     screen.fill((0, 0, 0))
     chessboard.draw()
     pygame.display.flip()  # Update the display
+    
+    # Check for check and checkmate
+    if chessboard.is_check('white'):
+        print("White is in check!")
+    if chessboard.is_check('black'):
+        print("Black is in check!")
+    if chessboard.is_checkmate('white'):
+        print("Checkmate! Black wins!")
+        running = False
+    if chessboard.is_checkmate('black'):
+        print("Checkmate! White wins!")
+        running = False
 
 # Quit Pygame
 pygame.quit()

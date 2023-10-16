@@ -206,6 +206,25 @@ class Chessboard:
     
     
     ### CHECK
+    def is_check(self, player_color):
+        # Find the king's position
+        for row in range(8):
+            for col in range (8):
+                piece = self.board[row][col]
+                if isinstance(piece, King) and piece.color == player_color:
+                    king_position = (row, col)
+                    break
+
+        # Check if the king is threatened by any opponent's piece
+        for row in range(8):
+            for col in range(8):
+                piece = self.board[row][col]
+                if piece is not None and piece.color != player_color:
+                    valid_moves = piece.get_valid_moves(self.board)
+                    if king_position in valid_moves:
+                        return True
+        return False
+
     def is_checkmate(self, player_color):
         # Check if the king is in check
         if not self.is_check(player_color):
@@ -222,29 +241,10 @@ class Chessboard:
                         new_board = [row[:] for row in self.board]
                         new_board[row][col] = None
                         new_board[move[0]][move[1]] = piece
-                        if not self.is_check(new_board, player_color):
+                        if not self.is_check(player_color):
                             return False
         # If the king is in check and has no legal moves, it's checkmate
         return True
-    
-    def is_check(self, player_color):
-    # Find the king's position
-        for row in range(8):
-            for col in range(8):
-                piece = self.board[row][col]
-                if isinstance(piece, King) and piece.color == player_color:
-                    king_position = (row, col)
-                    break
-
-        # Check if the king is threatened by any opponent's piece
-        for row in range(8):
-            for col in range(8):
-                piece = self.board[row][col]
-                if piece is not None and piece.color != player_color:
-                    valid_moves = piece.get_valid_moves(self.board)
-                    if king_position in valid_moves:
-                        return True
-        return False
     
     ### DRAW
     
