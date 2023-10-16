@@ -204,47 +204,91 @@ class Chessboard:
         self.selected_piece.move_castle(new_king_position, self.board, Rook)
         queenside_rook.move(queenside_rook_position, self.board)   
     
-    
     ### CHECK
-    def is_check(self, player_color):
-        # Find the king's position
+    def get_king_position(self, color):
         for row in range(8):
-            for col in range (8):
+            for col in range(8):
                 piece = self.board[row][col]
+                if isinstance(piece, King) and piece.color == color:
+                    return (row, col)
+        return None
+    
+    def is_check(self, player_color, board=None):
+        # Find the king's position
+        if board is None:
+            board = self.board
+
+        for row in range(8):
+            for col in range(8):
+                piece = board[row][col]
                 if isinstance(piece, King) and piece.color == player_color:
                     king_position = (row, col)
                     break
+            else:
+                continue
+            break
 
         # Check if the king is threatened by any opponent's piece
         for row in range(8):
             for col in range(8):
-                piece = self.board[row][col]
+                piece = board[row][col]
                 if piece is not None and piece.color != player_color:
-                    valid_moves = piece.get_valid_moves(self.board)
+                    valid_moves = piece.get_valid_moves(board)
                     if king_position in valid_moves:
                         return True
         return False
 
+
     def is_checkmate(self, player_color):
-        # Check if the king is in check
+        # Find the king's position
         if not self.is_check(player_color):
             return False
+        
+        king_position = self.get_king_position(player_color)
+        if king_position is None:
+            return False  # King not found
 
-        # Check if the king has any legal moves left
+        king_row, king_col = king_position
+
+        # 2. Check if the king has any legal moves left
+        for r in range(king_row - 1, king_row + 2):
+            for c in range(king_col - 1, king_col + 2):
+                if 0 <= r < 8 and 0 <= c < 8:
+                    if not self.is_check_move(king_position, (r, c), player_color):
+                        return False  # The king can escape
+
+        # 3. Check if any piece can capture the attacking piece or block its path
         for row in range(8):
             for col in range(8):
                 piece = self.board[row][col]
                 if piece is not None and piece.color == player_color:
                     valid_moves = piece.get_valid_moves(self.board)
                     for move in valid_moves:
-                        # Simulate the move and check if the king is still in check
-                        new_board = [row[:] for row in self.board]
-                        new_board[row][col] = None
-                        new_board[move[0]][move[1]] = piece
-                        if not self.is_check(player_color):
-                            return False
-        # If the king is in check and has no legal moves, it's checkmate
+                        if not self.is_check_move((row, col), move, player_color):
+                            return False  # A piece can capture or block the attack
+
+        # If all conditions are met, it's checkmate
         return True
+
+    def is_check_move(self, from_position, to_position, player_color):
+        # Simulate a move to check if the king is still in check
+        new_board = [row[:] for row in self.board]
+        from_row, from_col = from_position
+        to_row, to_col = to_position
+
+        new_board[to_row][to_col] = new_board[from_row][from_col]
+        new_board[from_row][from_col] = None
+
+        return self.is_check(player_color, new_board)
+    
+    
+    def display_possible_king_moves(self, king_position):
+        king = self.board[king_position[0]][king_position[1]]
+        if isinstance(king, King) and self.is_check(king.color):
+            possible_moves = king.get_possible_king_moves(self.board)
+            for move in possible_moves:
+                pygame.draw.circle(self.screen, (0, 255, 0), (move[1] * self.SQUARE_SIZE + self.SQUARE_SIZE // 2, move[0] * self.SQUARE_SIZE + self.SQUARE_SIZE // 2), 10)
+
     
     ### DRAW
     

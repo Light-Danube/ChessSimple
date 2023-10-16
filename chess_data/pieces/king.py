@@ -109,3 +109,19 @@ class King:
                 valid_moves.append((row, col - 2))
 
         return valid_moves
+    
+    def get_possible_king_moves(self, board):
+        row, col = self.pos
+        possible_moves = []
+
+        # Define the eight possible directions a king can move
+        directions = [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1)]
+
+        for dr, dc in directions:
+            r, c = row + dr, col + dc
+            if 0 <= r < 8 and 0 <= c < 8:
+                target_piece = board[r][c]
+                if target_piece is None or target_piece.color != self.color:
+                    possible_moves.append((r, c))
+
+        return possible_moves

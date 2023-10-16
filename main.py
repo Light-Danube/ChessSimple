@@ -46,6 +46,11 @@ while running:
     if chessboard.is_checkmate('black'):
         print("Checkmate! White wins!")
         running = False
+    else:
+        # Check if the black king is in check and display possible moves
+        king_position = chessboard.get_king_position('black')
+        if chessboard.is_check('black'):
+            chessboard.display_possible_king_moves(king_position)
 
 # Quit Pygame
 pygame.quit()
