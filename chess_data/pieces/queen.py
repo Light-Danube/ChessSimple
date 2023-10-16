@@ -58,6 +58,18 @@ class Queen:
                 break
             r -= 1
             c += 1
+        
+        # Check diagonally (up-left)
+        r, c = row - 1, col - 1
+        while r >= 0 and c >= 0:
+            if board[r][c] is None:
+                valid_moves.append((r, c))
+            else:
+                if board[r][c].color != self.color:
+                    valid_moves.append((r, c))
+                break
+            r -= 1
+            c -= 1
 
         # Diagonal (down-right)
         r, c = row + 1, col + 1
