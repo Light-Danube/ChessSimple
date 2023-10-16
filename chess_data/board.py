@@ -214,19 +214,11 @@ class Chessboard:
         return None
     
     def is_check(self, player_color, board=None):
-        # Find the king's position
+    # Find the king's position
         if board is None:
             board = self.board
 
-        for row in range(8):
-            for col in range(8):
-                piece = board[row][col]
-                if isinstance(piece, King) and piece.color == player_color:
-                    king_position = (row, col)
-                    break
-            else:
-                continue
-            break
+        king_position = self.get_king_position(player_color)
 
         # Check if the king is threatened by any opponent's piece
         for row in range(8):
@@ -240,39 +232,43 @@ class Chessboard:
 
 
     def is_checkmate(self, player_color):
-        # Find the king's position
+    # Check if the king is in check
         if not self.is_check(player_color):
             return False
-        
+
         king_position = self.get_king_position(player_color)
         if king_position is None:
             return False  # King not found
 
         king_row, king_col = king_position
 
-        # 2. Check if the king has any legal moves left
+        # Check if the king has any legal moves left
         for r in range(king_row - 1, king_row + 2):
             for c in range(king_col - 1, king_col + 2):
-                if 0 <= r < 8 and 0 <= c < 8:
+                if 0 <= r < 8 and 0 <= c < 8 and (r != king_row or c != king_col):
                     if not self.is_check_move(king_position, (r, c), player_color):
                         return False  # The king can escape
 
-        # 3. Check if any piece can capture the attacking piece or block its path
+        # Check if any piece can capture the attacking piece or block its path
         for row in range(8):
             for col in range(8):
                 piece = self.board[row][col]
                 if piece is not None and piece.color == player_color:
                     valid_moves = piece.get_valid_moves(self.board)
                     for move in valid_moves:
-                        if not self.is_check_move((row, col), move, player_color):
+                        if not self.is_check_move((row, col), move, player_color, board=self.board):
                             return False  # A piece can capture or block the attack
 
         # If all conditions are met, it's checkmate
         return True
 
-    def is_check_move(self, from_position, to_position, player_color):
+
+    def is_check_move(self, from_position, to_position, player_color, board=None):
         # Simulate a move to check if the king is still in check
-        new_board = [row[:] for row in self.board]
+        if board is None:
+            board = self.board
+
+        new_board = [row[:] for row in board]
         from_row, from_col = from_position
         to_row, to_col = to_position
 
@@ -280,6 +276,7 @@ class Chessboard:
         new_board[from_row][from_col] = None
 
         return self.is_check(player_color, new_board)
+
     
     
     def display_possible_king_moves(self, king_position):
