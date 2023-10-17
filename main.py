@@ -13,6 +13,9 @@ pygame.display.set_caption('SimpleChess')
 # Create a Chessboard instance
 chessboard = Chessboard(screen)
 
+# Define the initial player (white starts)
+current_player = 'white'
+
 # Main game loop
 running = True
 selected_piece = None
@@ -28,7 +31,13 @@ while running:
                 cc = mx // chessboard.SQUARE_SIZE
                 rr = my // chessboard.SQUARE_SIZE
                 
-                chessboard.handle_click((rr, cc), 'white')
+                if current_player == 'white':
+                    chessboard.handle_click((rr, cc), 'white')
+                else:
+                    chessboard.handle_click((rr, cc), 'black')
+
+                # Switch to the next player's turn
+                current_player = 'white' if current_player == 'black' else 'black'
 
     # Draw the chessboard and pieces
     screen.fill((0, 0, 0))

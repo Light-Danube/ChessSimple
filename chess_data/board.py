@@ -290,3 +290,6 @@ class Chessboard:
     ### DRAW
     
     ### OTHER MOMENTS
+    def is_player_turn(self, player_color):
+        # Check if it's the turn of the specified player
+        return self.current_player == player_color
